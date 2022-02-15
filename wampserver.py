@@ -1,13 +1,11 @@
 import asyncio
 from os import environ
-
-from autobahn.asyncio.component import Component
 from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
 
 
 class Component(ApplicationSession):
     async def onJoin(self, details):
-        def test():
+        def ip():
             while True:
                 try:
                     print('Write ip:')
@@ -15,7 +13,9 @@ class Component(ApplicationSession):
                     return get
                 finally:
                     pass
-        await self.register(test, 'com.arguments.test')
+
+        await self.register(ip, 'com.arguments.ip')
+
         print("Connected")
 
     def onDisconnect(self):
