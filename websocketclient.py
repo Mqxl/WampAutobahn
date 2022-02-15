@@ -44,8 +44,7 @@ if __name__ == '__main__':
             loop.run_until_complete(run)
             thread = Thread(target=loop.run_forever)
             thread.start()
-            print('Requested stop!')
             loop.call_soon_threadsafe(loop.stop)
             thread.join()
-        finally:
-            pass
+        except IndexError:
+            print('Connected')

@@ -9,13 +9,11 @@ class MyServerProtocol(WebSocketServerProtocol):
     def onConnect(self, response):
         print("Connected to Server: {}".format(response.peer))
 
-    def onOpen(self):
+    async def onOpen(self):
         while True:
             try:
-                print('Write message')
-                message = input()
-                self.sendMessage(message.encode('utf8'))
-                sleep(10)
+                self.sendMessage(u"Hello, world!".encode('utf8'))
+                await asyncio.sleep(5)
             finally:
                 pass
 
