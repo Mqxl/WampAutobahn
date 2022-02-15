@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 
 from autobahn.asyncio import WebSocketServerProtocol
@@ -16,6 +17,9 @@ class MyServerProtocol(WebSocketServerProtocol):
                 await asyncio.sleep(5)
             finally:
                 pass
+
+    async def onMessage(self, payload, isBinary):
+        print("Message: {0}".format(payload.decode('utf8')))
 
 
 if __name__ == '__main__':

@@ -12,6 +12,14 @@ class MyClientProtocol(WebSocketClientProtocol):
     async def onMessage(self, payload, isBinary):
         print("Message: {0}".format(payload.decode('utf8')))
 
+    async def onOpen(self):
+        while True:
+            try:
+                self.sendMessage(u"Im connected".encode('utf8'))
+                await asyncio.sleep(15)
+            finally:
+                pass
+
 
 class Component(ApplicationSession):
     async def onJoin(self, details):
