@@ -27,7 +27,7 @@ class MyClientProtocol(WebSocketClientProtocol):
         print('Try to reconnect')
 
 
-def wamp():
+async def wamp():
     while True:
         try:
             nest_asyncio.apply()
@@ -61,13 +61,13 @@ class Component(ApplicationSession):
                 thread.start()
                 loop.call_soon_threadsafe(loop.stop)
                 thread.join()
-            except self.state != WebSocketProtocol.STATE_OPEN:
-                print('a')
+            finally:
+                continue
 
 
 if __name__ == '__main__':
     while True:
         try:
-            wamp()
+            asyncio.run(wamp())
         finally:
-            pass
+            continue

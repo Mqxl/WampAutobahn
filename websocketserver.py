@@ -1,6 +1,3 @@
-import logging
-from time import sleep
-
 from autobahn.asyncio import WebSocketServerProtocol
 import asyncio
 from autobahn.asyncio.websocket import WebSocketServerFactory
