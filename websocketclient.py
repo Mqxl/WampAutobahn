@@ -27,22 +27,18 @@ class MyClientProtocol(WebSocketClientProtocol):
         print('Try to reconnect')
 
 
-async def wamp():
-    while True:
-        try:
-            nest_asyncio.apply()
-            loop = asyncio.get_event_loop()
-            url = environ.get("AUTOBAHN_DEMO_ROUTER", "ws://127.0.0.1:8080/ws")
-            realm = "realm1"
-            runner = ApplicationRunner(url, realm)
-            run = runner.run(Component)
-            loop.run_until_complete(run)
-            thread = Thread(target=loop.run_forever)
-            thread.start()
-            loop.call_soon_threadsafe(loop.stop)
-            thread.join()
-        finally:
-            continue
+def connect():
+    nest_asyncio.apply()
+    loop = asyncio.get_event_loop()
+    url = environ.get("AUTOBAHN_DEMO_ROUTER", "ws://127.0.0.1:8080/ws")
+    realm = "realm1"
+    runner = ApplicationRunner(url, realm)
+    run = runner.run(Component)
+    loop.run_until_complete(run)
+    thread = Thread(target=loop.run_forever)
+    thread.start()
+    loop.call_soon_threadsafe(loop.stop)
+    thread.join()
 
 
 class Component(ApplicationSession):
@@ -68,6 +64,6 @@ class Component(ApplicationSession):
 if __name__ == '__main__':
     while True:
         try:
-            asyncio.run(wamp())
-        finally:
-            continue
+            pass
+        except KeyboardInterrupt:
+            pass

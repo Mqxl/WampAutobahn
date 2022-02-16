@@ -1,6 +1,7 @@
 import asyncio
 from os import environ
 from time import sleep
+from websocketclient import connect
 
 from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
 
@@ -17,6 +18,7 @@ class Component(ApplicationSession):
                     pass
 
         await self.register(ip, 'com.arguments.ip')
+        await connect()
 
         print("Connected")
 
