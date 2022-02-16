@@ -1,5 +1,7 @@
 import asyncio
 from os import environ
+from time import sleep
+
 from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
 
 
@@ -8,8 +10,8 @@ class Component(ApplicationSession):
         def ip():
             while True:
                 try:
-                    print('Write ip:')
-                    get = input()
+                    sleep(10)
+                    get = '127.0.0.1'
                     return get
                 finally:
                     pass

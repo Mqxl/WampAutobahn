@@ -26,7 +26,6 @@ if __name__ == '__main__':
 
     factory = WebSocketServerFactory()
     factory.protocol = MyServerProtocol
-
     loop = asyncio.get_event_loop()
     coro = loop.create_server(factory, '127.0.0.1', 5000)
     server = loop.run_until_complete(coro)
