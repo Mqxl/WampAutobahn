@@ -1,22 +1,21 @@
 from os import environ
 from threading import Thread
-from time import sleep
-
+from multiprocessing import Process
 import autobahn.exception
 from autobahn.asyncio import WebSocketClientProtocol, ApplicationSession
 import asyncio
 from autobahn.asyncio.wamp import ApplicationRunner
 from autobahn.asyncio.websocket import WebSocketClientFactory
 import nest_asyncio
-from autobahn.exception import PayloadExceededError, Disconnected
-from autobahn.wamp import TransportLost
-from autobahn.websocket.protocol import WebSocketProtocol
 
 
 class MyClientProtocol(WebSocketClientProtocol):
 
     async def onMessage(self, payload, isBinary):
-        print("Message: {0}".format(payload.decode('utf8')))
+        try:
+            print("Message: {0}".format(payload.decode('utf8')))
+        finally:
+            pass
         if autobahn.exception.Disconnected:
             pass
 
@@ -41,10 +40,17 @@ def connect():
     thread.join()
 
 
+def msg():
+    get = 'Process created'
+    return get
+
+
 class Component(ApplicationSession):
 
     async def onJoin(self, details):
-        while True:
+        await self.register(msg, 'com.arguments.msg')
+        i = 0
+        while i < 10:
             try:
                 test = await self.call('com.arguments.ip')
                 nest_asyncio.apply()
@@ -55,8 +61,14 @@ class Component(ApplicationSession):
                 loop.run_until_complete(coro)
                 thread = Thread(target=loop.run_forever)
                 thread.start()
+                p = Process(target=Thread)
+                p.start()
                 loop.call_soon_threadsafe(loop.stop)
+                if not p.join():
+                    print('Process pid is ' + str(p.pid))
                 thread.join()
+                p.join()
+                i += 1
             finally:
                 continue
 

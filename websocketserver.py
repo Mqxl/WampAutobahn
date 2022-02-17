@@ -13,7 +13,7 @@ class MyServerProtocol(WebSocketServerProtocol):
                 self.sendMessage(u"Hello, world!".encode('utf8'))
                 await asyncio.sleep(5)
             finally:
-                pass
+                continue
 
     async def onMessage(self, payload, isBinary):
         print("Message: {0}".format(payload.decode('utf8')))
