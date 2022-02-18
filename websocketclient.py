@@ -1,3 +1,4 @@
+import os
 from os import environ
 from threading import Thread
 from multiprocessing import Process
@@ -7,6 +8,7 @@ import asyncio
 from autobahn.asyncio.wamp import ApplicationRunner
 from autobahn.asyncio.websocket import WebSocketClientFactory
 import nest_asyncio
+import multiprocessing as mp
 
 
 class MyClientProtocol(WebSocketClientProtocol):
@@ -40,15 +42,12 @@ def connect():
     thread.join()
 
 
-def msg():
-    get = 'Process created'
-    return get
+def foo(q):
+    q.put("Message process " + str(os.getpid()) + ' To parent ')
 
 
 class Component(ApplicationSession):
-
     async def onJoin(self, details):
-        await self.register(msg, 'com.arguments.msg')
         i = 0
         while i < 10:
             try:
@@ -61,13 +60,14 @@ class Component(ApplicationSession):
                 loop.run_until_complete(coro)
                 thread = Thread(target=loop.run_forever)
                 thread.start()
-                p = Process(target=Thread)
+                q = mp.Queue()
+                p = mp.Process(target=foo, args=(q,))
                 p.start()
                 loop.call_soon_threadsafe(loop.stop)
-                if not p.join():
-                    print('Process pid is ' + str(p.pid))
-                thread.join()
-                p.join()
+                print(p)
+                result = str(q.get())
+                al = await self.call('com.arguments.get', fr=str(result), to=str(os.getpid()))
+                print('{}'.format(al))
                 i += 1
             finally:
                 continue

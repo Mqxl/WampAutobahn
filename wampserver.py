@@ -1,4 +1,5 @@
 import asyncio
+import os
 from os import environ
 from time import sleep
 from websocketclient import connect
@@ -12,16 +13,19 @@ class Component(ApplicationSession):
                 try:
                     sleep(10)
                     get = '127.0.0.1'
-                    msg = await self.call('com.arguments.msg')
-                    print('{}'.format(msg))
                     return get
                 finally:
                     pass
 
+        async def get(fr='somebody', to='somebody'):
+            #'{}'.format(a) + "to" + str(os.getpid())
+            return fr + to
+
         await self.register(ip, 'com.arguments.ip')
+        await self.register(get, 'com.arguments.get')
         await connect()
 
-    def onDisconnect(self):
+    async def onDisconnect(self):
         asyncio.get_event_loop().stop()
 
 

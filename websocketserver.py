@@ -20,7 +20,6 @@ class MyServerProtocol(WebSocketServerProtocol):
 
 
 if __name__ == '__main__':
-
     factory = WebSocketServerFactory()
     factory.protocol = MyServerProtocol
     loop = asyncio.get_event_loop()
